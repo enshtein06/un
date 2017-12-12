@@ -2,25 +2,26 @@
 <nobr>
 File system generator. </br>
 </br>
-Project was written on Qt.</br>
-It generates file system with the following architechture:</br>
- ___________________ </br>
-<pre>|     Header        | Contains 5 values.  uint_32t each of them</br>
+Проект написан на Qt, после компилирования можно использовать .exe Файл</br>
+Сгенерируемая файловая система будет иметь следующию архитектуру:</br>
+ <pre>___________________  20 байт, содержит 5 значений по 4 байта каждый. 1) размер списка + 20 байт Header -1; 2) размер данных;</br>
+|     Header        | 3) CRC всей системы; 4) CRC списка; 5) CRC данных </br>
 |___________________|</br>
-| List of files     | Contains list of files headers insight of file system. </br>
-| declaration       | It's following structure: 4 bytes of files offset by X, X is end of list, </br>
-|__________________X| 4 bytes - size of file, 1 byte N (number) of symbols in name of file. N - array, name of file.</br>
+| List of files     | Список заголовков файлов </br>
+| declaration       | Имеет структуру: 4 сдвиг данных относительно Х, где X конец списка заголовков, </br>
+|__________________X| 4 байта размер файла, 1 байт N (количество) символов в имени файла. N - массив, имя файла.</br>
 |                   |</br>
-|      Data         | This segment contains file's data.</br>
+|      Data         | Здесь находятся данные файлов.</br>
 |___________________|</br></pre>
 </br>
 </br>
-Usage:</br>
-in main.c : add directory with your file system in your project, call the directory by 2 symbolic name, then compile
-the project.
-You'll get convinient file system with simple way to parse name of your files. </br>
-Array N (name of file) doesn't contain name of directory with file system.</br>
+Использование .exe:</br>
+Чтобы сгенерировать файловую систему, необходимо добавить директорию с файлами в папку проекта. </br>Назвать ее fs, либо поменять название в main.c </br>
+Пути к файлам, будут прописаны без указания стартовой директории. </br>
+На выходе будет бинарный файл.</br>
 
-Field of implemention:</br>
-Use external flash memory in microprocessor with limitted storage.</br>
+Цель использования:</br>
+При хранении данных на внешней флеш памяти, эта структура файловой системы, позволяет удобно парсить файлы по заголовкам.</br>
+В заголовке будет содержаться значение размера файла и его сдвига относительно X. </br>
+Размер всего списка можно взять из Header'а. Сдвиг по именам расчитывается как N + 9, где N - количество символов в имени файла</br>
 </nobr>
